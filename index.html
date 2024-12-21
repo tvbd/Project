@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+     <link rel="icon" type="image/png" href="//encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb4gUESEMQ-sRgmF5R9v2b4c1It2XLFAuQXA&usqp=CAU">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --background-light: #f8fafc;
+            --background-dark: #0f172a;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --text-light: #334155;
+            --text-dark: #e2e8f0;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: var(--background-light);
+            color: var(--text-light);
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--card-light);
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 24px;
+            position: sticky;
+            top: 0; /* Move header slightly up */
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 24px 16px 56px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: transparent;
+            color: inherit;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgb(37 99 235 / 0.1);
+        }
+
+        .categories {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 4px;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category {
+            padding: 12px 24px;
+            background: #f1f5f9;
+            border-radius: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+            font-weight: 500;
+            border: 2px solid transparent;
+        }
+
+        .category.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: transparent;
+        }
+
+        .category:hover:not(.active) {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 24px;
+            padding: 20px 0;
+        }
+
+        .app-card {
+            background: var(--card-light);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.02));
+            z-index: 1;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .app-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 16px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+        }
+
+        .app-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .app-category {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .control-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: var(--transition);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            background: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        body.dark-theme .header {
+            background: var(--card-dark);
+        }
+
+        body.dark-theme .app-card {
+            background: var(--card-dark);
+        }
+
+        body.dark-theme .search-input {
+            border-color: #334155;
+        }
+
+        body.dark-theme .category {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .category:hover:not(.active) {
+            background: #475569;
+            border-color: #64748b;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: var(--card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        .popup-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .popup-content p {
+            margin-bottom: 10px;
+        }
+
+        .popup-content .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        body.dark-theme .popup-content {
+            background-color: var(--card-dark);
+            color: var(--text-dark);
+        }
+
+        body.dark-theme .popup-content .close {
+            color: var(--text-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .apps-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .apps-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .header {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .app-card {
+                padding: 16px;
+            }
+
+            .app-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+
+            .search-input {
+                padding: 12px 20px 12px 48px;
+            }
+
+            .category {
+                padding: 10px 20px;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes shimmer {
+            0% {
+                background-position: -468px 0;
+            }
+            100% {
+                background-position: 468px 0;
+            }
+        }
+
+        .loading {
+            animation: shimmer 1s linear infinite;
+            background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
+            background-size: 800px 104px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">
+                Social Media Hub
+                <div class="view-options">
+                    <button class="control-btn" id="gridToggle">
+                        <i class="fas fa-grip-horizontal"></i>
+                    </button>
+                    <button class="control-btn" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="control-btn" id="developerInfoToggle">
+                        <i class="fas fa-user"></i> <!-- Font Awesome Developer Icon -->
+                    </button>
+                </div>
+            </div>
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search apps...">
+            </div>
+            <div class="categories">
+                <div class="category active">All</div>
+            </div>
+        </div>
+        <div class="apps-grid"></div>
+    </div>
+
+    <div id="developerPopup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <h2>Developer Info</h2>
+            <p>Name: TVBD</p>         
+            <p>Bio: A passionate developer with a love for creating innovative solutions.</p>
+        </div>
+    </div>
+
+    <script>
+        // Replace this URL with your GitHub raw JSON file URL
+        const GITHUB_JSON_URL = 'apps.json';
+
+        let apps = [];
+        let categories = ['All'];
+        const appsGrid = document.querySelector('.apps-grid');
+        const searchInput = document.querySelector('.search-input');
+        const categoriesContainer = document.querySelector('.categories');
+        const themeToggle = document.querySelector('#themeToggle');
+        const gridToggle = document.querySelector('#gridToggle');
+
+        let currentCategory = 'All';
+        let isDarkTheme = false;
+        let isCompactView = false;
+
+        // Fetch apps data from GitHub
+        async function fetchAppsData() {
+            try {
+                const response = await fetch(GITHUB_JSON_URL);
+                const data = await response.json();
+
+                // Process the data
+                apps = [];
+                categories = ['All'];
+
+                // Convert the JSON structure to our apps array
+                Object.values(data).forEach(category => {
+                    category.apps.forEach(app => {
+                        apps.push(app);
+                    });
+                    categories.push(category.category_name);
+                });
+
+                // Initial render
+                updateCategories();
+                renderApps(apps);
+            } catch (error) {
+                console.error('Error fetching apps data:', error);
+                appsGrid.innerHTML = '<div class="error">Failed to load apps. Please try again later.</div>';
+            }
+        }
+
+        // Update category buttons
+        function updateCategories() {
+            categoriesContainer.innerHTML = categories.map(category => 
+                `<div class="category ${category === 'All' ? 'active' : ''}">${category}</div>`
+            ).join('');
+
+            // Reattach event listeners
+            document.querySelectorAll('.category').forEach(categoryBtn => {
+                categoryBtn.addEventListener('click', () => {
+                    document.querySelectorAll('.category').forEach(btn => btn.classList.remove('active'));
+                    categoryBtn.classList.add('active');
+                    currentCategory = categoryBtn.textContent;
+                    filterApps();
+                });
+            });
+        }
+
+        function renderApps(filteredApps) {
+            appsGrid.innerHTML = '';
+            filteredApps.forEach(app => {
+                const appCard = document.createElement('div');
+                appCard.className = 'app-card';
+                appCard.innerHTML = `
+                    <div class="app-icon" style="background-color: ${app.color}">
+                        <i class="${app.icon}"></i>
+                    </div>
+                    <div class="app-name">${app.name}</div>
+                    <div class="app-category">${app.category}</div>
+                `;
+
+                appCard.addEventListener('click', () => {
+                    appCard.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        appCard.style.transform = '';
+                        window.open(app.url, '_blank');
+                    }, 100);
+                });
+
+                appCard.classList.add('loading');
+                setTimeout(() => {
+                    appCard.classList.remove('loading');
+                }, Math.random() * 1000);
+
+                appsGrid.appendChild(appCard);
+            });
+        }
+
+        function filterApps() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filtered = apps.filter(app => {
+                const matchesSearch = app.name.toLowerCase().includes(searchTerm) || 
+                                    app.category.toLowerCase().includes(searchTerm);
+                const matchesCategory = currentCategory === 'All' || app.category === currentCategory;
+                return matchesSearch && matchesCategory;
+            });
+            renderApps(filtered);
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAppsData();
+
+            // Search functionality
+            searchInput.addEventListener('input', filterApps);
+
+            // Theme toggle
+            themeToggle.addEventListener('click', () => {
+                isDarkTheme = !isDarkTheme;
+                document.body.classList.toggle('dark-theme');
+                themeToggle.innerHTML = isDarkTheme ? 
+                    '<i class="fas fa-sun"></i>' : 
+                    '<i class="fas fa-moon"></i>';
+            });
+
+            // Grid toggle
+            gridToggle.addEventListener('click', () => {
+                isCompactView = !isCompactView;
+                if (isCompactView) {
+                    appsGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))';
+                    gridToggle.innerHTML = '<i class="fas fa-grip-vertical"></i>';
+                } else {
+                    appsGrid.style.gridTemplateColumns = '';
+                    gridToggle.innerHTML = '<i class="fas fa-grip-horizontal"></i>';
+                }
+            });
+
+            // Developer info popup
+            const developerInfoToggle = document.querySelector('#developerInfoToggle');
+            const developerPopup = document.querySelector('#developerPopup');
+            const popupClose = document.querySelector('.popup-content .close');
+
+            developerInfoToggle.addEventListener('click', () => {
+                developerPopup.style.display = 'flex';
+            });
+
+            popupClose.addEventListener('click', () => {
+                developerPopup.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === developerPopup) {
+                    developerPopup.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
+
