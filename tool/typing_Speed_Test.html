@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Typing Speed Test</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --error-color: #ef4444;
+            --success-color: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .text-display {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .text-display.active {
+            border: 2px solid var(--primary-color);
+        }
+
+        .current-word {
+            background-color: #dbeafe;
+            padding: 0.2rem;
+            border-radius: 4px;
+        }
+
+        .correct {
+            color: var(--success-color);
+        }
+
+        .incorrect {
+            color: var(--error-color);
+            text-decoration: underline wavy var(--error-color);
+        }
+
+        .input-area {
+            margin-bottom: 2rem;
+        }
+
+        .type-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        .type-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+
+        .settings-panel {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .settings-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .setting-group {
+            margin-bottom: 1rem;
+        }
+
+        .setting-label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .setting-select {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            width: 200px;
+        }
+
+        .history-chart {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark theme styles */
+        body.dark-theme {
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        body.dark-theme .text-display,
+        body.dark-theme .stat-box,
+        body.dark-theme .settings-panel,
+        body.dark-theme .history-chart {
+            background: #2d2d2d;
+            color: #ffffff;
+        }
+
+        body.dark-theme .type-input {
+            background: #2d2d2d;
+            color: #ffffff;
+            border-color: #404040;
+        }
+
+        body.dark-theme .stat-label {
+            color: #a1a1aa;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        body.dark-theme .modal-content {
+            background: #2d2d2d;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <header>
+            <h1 class="title">Professional Typing Speed Test</h1>
+        </header>
+
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value" id="wpm">0</div>
+                <div class="stat-label">Words Per Minute</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="cpm">0</div>
+                <div class="stat-label">Characters Per Minute</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="accuracy">100%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="timer">60</div>
+                <div class="stat-label">Time Left (s)</div>
+            </div>
+        </div>
+
+        <div class="settings-panel">
+            <h2 class="settings-title">Test Settings</h2>
+            <div class="setting-group">
+                <label class="setting-label" for="timeLimit">Time Limit:</label>
+                <select class="setting-select" id="timeLimit">
+                    <option value="30">30 seconds</option>
+                    <option value="60" selected>1 minute</option>
+                    <option value="120">2 minutes</option>
+                    <option value="300">5 minutes</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label class="setting-label" for="difficulty">Difficulty:</label>
+                <select class="setting-select" id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="text-display" id="textDisplay"></div>
+
+        <div class="input-area">
+            <input type="text" class="type-input" id="typeInput" placeholder="Start typing here..." autocomplete="off" disabled>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" id="startBtn">Start Test</button>
+            <button class="btn btn-secondary" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="history-chart" id="historyChart"></div>
+    </div>
+
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <h2>Test Results</h2>
+            <div id="resultStats"></div>
+            <button class="btn btn-primary" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const textDisplay = document.getElementById('textDisplay');
+        const typeInput = document.getElementById('typeInput');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const wpmDisplay = document.getElementById('wpm');
+        const cpmDisplay = document.getElementById('cpm');
+        const accuracyDisplay = document.getElementById('accuracy');
+        const timerDisplay = document.getElementById('timer');
+        const resultModal = document.getElementById('resultModal');
+
+        let timeLeft;
+        let timer = null;
+        let testActive = false;
+        let wordIndex = 0;
+        let correctChars = 0;
+        let totalChars = 0;
+        let testHistory = [];
+
+        const texts = {
+            easy: [
+                "The quick brown fox jumps over the lazy dog. Simple words make typing easy and fun.",
+                "A gentle breeze blows through the trees. Birds sing sweet melodies in the morning.",
+                "Sunshine brings warmth and happiness to everyone. Children play in the park nearby."
+            ],
+            medium: [
+                "The sophisticated algorithm processes data with remarkable efficiency, utilizing advanced computational methods.",
+                "Scientists discovered unprecedented phenomena in quantum physics, challenging existing theoretical frameworks.",
+                "Environmental sustainability requires collaborative effort from industries, governments, and communities worldwide."
+            ],
+            hard: [
+                "The quintessential characteristics of photosynthesis exemplify nature's intricate biochemical processes.",
+                "Quantum entanglement demonstrates peculiar non-local correlations between subatomic particles.",
+                "Neuroplasticity facilitates cognitive adaptation through synaptic reorganization and molecular modifications."
+            ]
+        };
+
+        function getRandomText() {
+            const difficulty = document.getElementById('difficulty').value;
+            const textArray = texts[difficulty];
+            return textArray[Math.floor(Math.random() * textArray.length)];
+        }
+
+        function initializeTest() {
+            const text = getRandomText();
+            textDisplay.innerHTML = text.split('').map((char, index) => 
+                `<span class="char" id="char${index}">${char}</span>`
+            ).join('');
+            timeLeft = parseInt(document.getElementById('timeLimit').value);
+            timerDisplay.textContent = timeLeft;
+            wordIndex = 0;
+            correctChars = 0;
+            totalChars = 0;
+            updateStats();
+        }
+
+        function startTest() {
+            if (testActive) return;
+            testActive = true;
+            typeInput.disabled = false;
+            typeInput.focus();
+            initializeTest();
+            timer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    endTest();
+                }
+            }, 1000);
+            startBtn.disabled = true;
+        }
+
+        function endTest() {
+            clearInterval(timer);
+            testActive = false;
+            typeInput.disabled = true;
+            startBtn.disabled = false;
+            
+            const wpm = parseInt(wpmDisplay.textContent);
+            const accuracy = parseInt(accuracyDisplay.textContent);
+            
+            testHistory.push({ wpm, accuracy });
+            updateHistoryChart();
+            showResults();
+        }
+
+        function resetTest() {
+            clearInterval(timer);
+            testActive = false;
+            typeInput.disabled = true;
+            typeInput.value = '';
+            startBtn.disabled = false;
+            initializeTest();
+        }
+
+        function updateStats() {
+            const timeElapsed = parseInt(document.getElementById('timeLimit').value) - timeLeft;
+            const wpm = Math.round((correctChars / 5) * (60 / Math.max(timeElapsed, 1)));
+            const cpm = Math.round(correctChars * (60 / Math.max(timeElapsed, 1)));
+            const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
+
+            wpmDisplay.textContent = wpm;
+            cpmDisplay.textContent = cpm;
+            accuracyDisplay.textContent = accuracy + '%';
+        }
+
+        function handleInput(e) {
+            if (!testActive) return;
+
+            const currentChar = textDisplay.children[wordIndex];
+            const typedChar = e.target.value[e.target.value.length - 1];
+
+            if (currentChar && typedChar) {
+                totalChars++;
+                if (currentChar.textContent === typedChar) {
+                    currentChar.classList.add('correct');
+                    correctChars++;
+                } else {
+                    currentChar.classList.add('incorrect');
+                }
+                wordIndex++;
+                updateStats();
+            }
+
+            if (wordIndex >= textDisplay.children.length) {
+                endTest();
+            }
+        }
+
+        function updateHistoryChart() {
+    const chartContainer = document.getElementById('historyChart');
+    chartContainer.innerHTML = '<h2 class="settings-title">Performance History</h2>';
+    
+    if (testHistory.length === 0) {
+        chartContainer.innerHTML += '<p>No test history available yet. Complete a test to see your progress!</p>';
+        return;
+    }
+
+    const chartHeight = 200;
+    const chartWidth = chartContainer.offsetWidth - 40;
+    const maxWPM = Math.max(...testHistory.map(test => test.wpm));
+    
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', chartWidth);
+    svg.setAttribute('height', chartHeight);
+    svg.style.marginTop = '20px';
+
+    // Draw grid lines
+    for (let i = 0; i <= 4; i++) {
+        const y = chartHeight - (i * chartHeight / 4);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', '0');
+        line.setAttribute('y1', y);
+        line.setAttribute('x2', chartWidth);
+        line.setAttribute('y2', y);
+        line.setAttribute('stroke', '#e2e8f0');
+        line.setAttribute('stroke-width', '1');
+        svg.appendChild(line);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', '-5');
+        text.setAttribute('y', y);
+        text.setAttribute('text-anchor', 'end');
+        text.setAttribute('fill', '#64748b');
+        text.setAttribute('font-size', '12');
+        text.textContent = Math.round(maxWPM * (i / 4));
+        svg.appendChild(text);
+    }
+
+    // Draw WPM line
+    const points = testHistory.map((test, index) => {
+        const x = (index / (testHistory.length - 1)) * chartWidth;
+        const y = chartHeight - (test.wpm / maxWPM) * chartHeight;
+        return `${x},${y}`;
+    }).join(' ');
+
+    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    polyline.setAttribute('points', points);
+    polyline.setAttribute('fill', 'none');
+    polyline.setAttribute('stroke', '#2563eb');
+    polyline.setAttribute('stroke-width', '2');
+    svg.appendChild(polyline);
+
+    chartContainer.appendChild(svg);
+}
+
+function showResults() {
+    const resultStats = document.getElementById('resultStats');
+    resultStats.innerHTML = `
+        <p>Words Per Minute: ${wpmDisplay.textContent}</p>
+        <p>Characters Per Minute: ${cpmDisplay.textContent}</p>
+        <p>Accuracy: ${accuracyDisplay.textContent}</p>
+    `;
+    resultModal.style.display = 'flex';
+}
+
+function closeModal() {
+    resultModal.style.display = 'none';
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+    const themeIcon = document.querySelector('.theme-toggle i');
+    themeIcon.classList.toggle('fa-sun');
+    themeIcon.classList.toggle('fa-moon');
+}
+
+// Event Listeners
+startBtn.addEventListener('click', startTest);
+resetBtn.addEventListener('click', resetTest);
+typeInput.addEventListener('input', handleInput);
+
+// Initialize
+initializeTest();
+updateHistoryChart();
+</script>
+</body>
+</html>
+
