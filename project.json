@@ -1,7 +1,8 @@
-[{"link2":"tool/M3U_Playlist_Maker.html","img":"","genre":"tv","lang":"IPTV","name":"M3U Playlist Maker","author":"TVBD"}
-,{"link2":"tool/M3U_Playlist_Checker.html","img":"","genre":"tv","lang":"IPTV","name":"M3U Playlist Maker","author":"TVBD"}
+[{"link2":"tool/M3U_Playlist_pro.html","img":"","genre":"tv","lang":"IPTV","name":"M3U Pro","author":"TVBD"}
+ ,{"link2":"tool/M3U_Playlist_Maker.html","img":"","genre":"tv","lang":"IPTV","name":"M3U Maker","author":"TVBD"}
+,{"link2":"tool/M3U_Playlist_Checker.html","img":"","genre":"tv","lang":"IPTV","name":"M3U Checker","author":"TVBD"}
 ,{"link2":"tool/Orbit_Pad.html","img":"","genre":"tool","lang":"IPTV","name":"Orbit","author":"TVBD"}
- ,{"link2":"tool/Premium_pad.html","img":"","genre":"tv","lang":"IPTV","name":"M3U Playlist Maker","author":"TVBD"}
+ ,{"link2":"tool/Premium_pad.html","img":"","genre":"tv","lang":"IPTV","name":"Notes pad","author":"TVBD"}
  ,{"link2":"tool/TV_Player.html","img":"","genre":"tv","lang":"IPTV","name":"TV Player","author":"TVBD"}	
  ,{"link2":"tool/ask-ai.html","img":"","genre":"tv","lang":"tool","name":"ask ai","author":"TVBD"}	
  ,{"link2":"tool/code-editor.html","img":"","genre":"tv","lang":"IPTV","name":"code editor","author":"TVBD"}	
